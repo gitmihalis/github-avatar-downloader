@@ -28,3 +28,8 @@ getRepoContributors('jquery', 'jquery', function(error, result) {
 		console.log(user.avatar_url);
 	})
 });
+
+function downloadImageByURL(url, filePath) {
+  // ...
+}
+downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
