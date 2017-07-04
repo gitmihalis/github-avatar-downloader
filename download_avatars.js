@@ -1,6 +1,7 @@
 const request = require('request');
+const fs = require('fs');
 const GITHUB_USER = "gitmihalis";
-const GITHUB_TOKEN = "d6aa0f9e34c80a0785969911c4bcdc2e2dd5dcc3";
+const GITHUB_TOKEN = "554f9fd2a4f225332b80bc5cff474d6204f7aa6f";
 
 console.log(`
 ( ͡° ͜ʖ ͡°)( ͡° ͜ʖ ͡°)( ͡° ͜ʖ ͡°)( ͡° ͜ʖ ͡°)( ͡° ͜ʖ ͡°)( ͡° ͜ʖ ͡°)( ͡° ͜ʖ ͡°)( ͡° ͜ʖ ͡°)
@@ -24,12 +25,19 @@ function getRepoContributors(repoOwner, repoName, cb) {
 }
 getRepoContributors('jquery', 'jquery', function(error, result) {
 	if (error) throw error;
-	result.forEach( function (user) {
-		console.log(user.avatar_url);
-	})
+	for ( let i = 0; i < result.length; i += 1) {
+	// result.forEach( function (user) {
+		if ( result[i].avatar_url ) {
+			downloadImageByURL(result[i].avatar_url, result[i].login );		
+		}
+	}
+	// })
 });
 
 function downloadImageByURL(url, filePath) {
-  // ...
+	console.log(filePath)
+  // The function will make a request to a given url, 
+  // saving the resulting image file to a specified filePath.
+  request.get(url).pipe(fs.createWriteStream('avatars/' + filePath + '.jpg') );
 }
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
+downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "kvirani.jpg")
