@@ -26,7 +26,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
 getRepoContributors('jquery', 'jquery', function(error, result) {
 	if (error) throw error;
 	for ( let i = 0; i < result.length; i += 1) {
-	// result.forEach( function (user) {
 		if ( result[i].avatar_url ) {
 			downloadImageByURL(result[i].avatar_url, result[i].login );		
 		}
@@ -35,7 +34,6 @@ getRepoContributors('jquery', 'jquery', function(error, result) {
 });
 
 function downloadImageByURL(url, filePath) {
-	console.log(filePath)
   // The function will make a request to a given url, 
   // saving the resulting image file to a specified filePath.
   request.get(url).pipe(fs.createWriteStream('avatars/' + filePath + '.jpg') );
