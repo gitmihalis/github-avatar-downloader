@@ -1,7 +1,8 @@
 const request = require('request');
 const fs = require('fs');
 const GITHUB_USER = "gitmihalis";
-const GITHUB_TOKEN = "55dcf90f9c8cb50301eb4ca8d8672f8dc2feff90";
+const GITHUB_TOKEN = process.env.GITHUB_ACCESS_TOKEN;
+
 const owner = process.argv.slice(2, 3);
 const repository = process.argv.slice(3, 4);
 
