@@ -25,7 +25,7 @@ const repository = process.argv.slice(3, 4);
 
 // Options for the API request
 const options = {
-	uri: 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repository + '/' + owner + '/contributors',
+	uri: `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repository}/${owner}/contributors`,
 	headers: { 
 		"User-Agent": "GitHub Avatar Downloader - Student Project",
 		Accept: "application/vnd.github.v3+json" 
@@ -33,25 +33,24 @@ const options = {
 };
 
 // Collect avatar image urls 
-function downloadAvatars(err, arr) {
-	if (err) throw new Error('Could not find contributors');
-	arr.forEach( function(contributor) {
-		request.get(contributor.avatar_url)
-			.on('error', console.log(`Error downloading from ${contributor.avatar_url}`))
-			.pipe(fs.createWriteStream(`./avatars/${contributor.login}.jpg`))
-	});
-}
-
-const contributors = request(options, function(err, res, body) {
-	let data = JSON.parse(body);
-	// Print the response status code if a response was received 
-	if(res  && res.statusCode === 404) {
-		console.log(`${res.statusCode} response.`)
+function downloadAvatars(err, res, body) {
+	if (res  && res.statusCode === 404) {
 		console.log('Repository not found!, check that the owner and repo are correct and try again.');
-		return;
 	}
-	return data;
-});
+	if (!err && res.statusCode === 200) {
+		let contributors = JSON.parse(body)
+
+		for ( let c of contributors ) {
+			request.get(c.avatar_url)
+				.pipe(fs.createWriteStream(`./avatars/${c.login}.jpg`))
+				.on('error', function(err) { 
+					console.log(`Error downloading from ${c.avatar_url}`)
+				})
+		}
+		
+	}
+}
+request(options, downloadAvatars )
 
 
 
